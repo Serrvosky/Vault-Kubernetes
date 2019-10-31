@@ -8,7 +8,7 @@ For this implementation, I suppose that you already have an operational Kubernet
 If you don't know how to use Terraform, a very good Infrastruture as Code tool, please check Hashicorp's page with all the documentation that you need to know. - [Start using Terraform for your Kubernetes deploys](https://www.terraform.io/)
 
 
-### Main file
+### main.tf file
 In this file you can find the following Kubernetes resources:
 - ConfigMap (vault-conf) - used to create the configuration file to Vault
 - Cluster Role Binding (vault-server-binding)
@@ -21,15 +21,15 @@ In this file, you must change the content of config.hcl file (in the config map)
 
 For example, if you want to storage your secrets in filesystem add:
 
-[`
+```
 storage "file" {
   path = "/mnt/vault/data"
 }
-`]
+```
 
 and uncomment this lines in the statefulset template:
 
-[`
+```
 volume_mount {
   name       = "vault-data"
   mount_path = "mnt/vault/data"
@@ -49,12 +49,12 @@ volume_claim_template {
     }
   }
 }
-`]
+```
 
 I choose using a Statefulset approach, to have persistent volumes and don't loose any critical data between redeploys, when using filesystem storage approach.
 
 
-### Vars file
+### vars.tf file
 
 In this file you can find some variables to improve your deployment. Each of them have a comment.
 
