@@ -7,7 +7,7 @@ resource "kubernetes_config_map" "vault-conf" {
   data = {
     "config.hcl" = <<EOH
 
-      PUT YOUR STORAGE CONFIGS HERE
+      <PUT YOUR STORAGE CONFIGS HERE>
         
       listener "tcp" {
         address          = "0.0.0.0:8200"
@@ -148,6 +148,11 @@ resource "kubernetes_stateful_set" "vault-statefulset" {
             sub_path = "config.hcl"
           }
 
+          # volume_mount {
+          #   name       = "vault-data"
+          #   mount_path = "/mnt/vault/data"
+          # }
+
           readiness_probe {
             http_get {
               path = "/v1/sys/health?standbyok=true"
@@ -161,5 +166,19 @@ resource "kubernetes_stateful_set" "vault-statefulset" {
         }
       }
     }
+    # volume_claim_template {
+    #   metadata {
+    #     name = "vault-data"
+    #   }
+    #   spec {
+    #     access_modes = ["ReadWriteOnce"]
+
+    #     resources {
+    #       requests = {
+    #         storage = "${var.dataStorageSize}"
+    #       }
+    #     }
+    #   }
+    # }
   }
 }
